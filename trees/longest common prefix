@@ -1,0 +1,75 @@
+class Solution {
+
+    class Node{
+
+        int freq;
+        Node children[] = new Node[26];
+
+        public Node(){
+
+            freq = 0;
+            for(int i=0;i<26;i++)
+            {
+                children[i] = null;
+            }
+        }
+
+
+    }
+
+    public void insert(String str, Node root){
+        
+        Node curr = root;
+
+        for(int i=0;i<str.length();i++){
+            
+            int index = str.charAt(i) - 97;
+
+// new node  only when it doesnot already exist
+            if(curr.children[index] == null)
+            curr.children[index] = new Node();
+
+            curr.children[index].freq++;
+
+            curr = curr.children[index];
+        }
+
+    }
+
+    public String prefix(Node root, int freq, String s){
+
+    
+        Node curr = root;
+        StringBuilder sb = new StringBuilder();
+
+        for(int i=0;i<s.length();i++){
+
+            int index = s.charAt(i) - 97;
+
+//it may not present i.e be null , therefore check it before accessing the freq
+            if(curr.children[index] == null || curr.children[index].freq != freq)
+            break;
+
+                sb.append(s.charAt(i));          
+                curr = curr.children[index];
+            }
+         
+
+        return sb.toString();
+    }
+
+    public String longestCommonPrefix(String[] strs) {
+        
+        if(strs.length==1)
+        return strs[0];
+
+
+        Node root = new Node();
+
+        for(String str:strs){
+            insert(str,root);
+        }
+
+        return prefix(root, strs.length , strs[0] );
+    }
+}
