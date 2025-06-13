@@ -1,0 +1,71 @@
+class Solution {
+
+    class Info{
+        int ele;
+        int freq;
+
+        public Info(int ele,int freq){
+            
+            this.ele = ele;
+            this.freq = freq;
+        }
+    }
+
+    public int majorityElement(int[] nums) {
+        
+            return helper(nums,0,nums.length-1).ele;
+
+    }
+
+    public int count(int nums[], int ele1 , int ele2){
+
+        int freq1 = 0; 
+        int freq2 = 0;
+
+        for(int num:nums){
+
+            if(num==ele1)
+            freq1++;
+            
+            if(num == ele2)
+            freq2++;
+        }
+
+        return freq1>freq2 ? ele1 :ele2;
+    }
+
+    public Info helper(int nums[] , int si, int ei){
+        
+        if(si == ei)
+        return new Info(nums[si],1);
+
+        int mid = si + (ei-si)/2;
+
+        Info left = helper(nums, si , mid);
+        Info right = helper(nums, mid+1 , ei);
+
+        if( left.ele == right.ele){
+            return new Info(left.ele,left.freq+right.freq);
+        }
+
+        else if(left.freq == right.freq){
+
+            if(count(nums,left.ele,right.ele) == left.ele)
+            return new Info(left.ele,left.freq);
+
+            else
+            return new Info(right.ele,right.freq);
+        }
+
+        else if(left.freq>right.freq){
+            return new Info(left.ele,left.freq);
+        }
+
+        else{
+            return new Info(right.ele,right.freq);
+        }
+
+       
+
+    }
+}
